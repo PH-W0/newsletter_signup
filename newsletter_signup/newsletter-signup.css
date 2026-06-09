@@ -157,7 +157,7 @@ body {
   transform: none;
 }
 
-/* Right column with illustration image */
+
 .right {
   background: linear-gradient(145deg, #ff8c42 0%, #ff6b6b 55%, #ff4757 100%);
   position: relative;
@@ -168,7 +168,7 @@ body {
   padding: 20px;
 }
 
-/* Subtle background decorative blobs */
+
 .right::before {
   content: '';
   position: absolute;
@@ -282,13 +282,11 @@ body {
 .btn-dismiss:hover  { opacity: 0.9; transform: translateY(-1px); }
 .btn-dismiss:active { transform: translateY(0); }
 
-/* Card success state (subscribed) */
 .card.subscribed .left            { display: none; }
 .card.subscribed .right           { display: none; }
 .card.subscribed                  { grid-template-columns: 1fr; max-width: 420px; }
 .card.subscribed .success-overlay { display: flex; }
 
-/* Responsive Design */
 @media (max-width: 700px) {
   .card {
     grid-template-columns: 1fr;
@@ -331,8 +329,6 @@ body {
     font-size: 1.5rem;
   }
 }
-
-/* Ensure images load properly */
 img[src*="icon-list.svg"],
 img[src*="illustration-sign-up-mobile.svg"] {
   pointer-events: none;

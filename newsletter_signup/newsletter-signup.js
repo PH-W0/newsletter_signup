@@ -44,32 +44,25 @@ function showSuccess(email) {
   successOverlay.focus();
 }
 
-function encode(data) {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-    .join('&');
-}
-
-async function submitToNetlify(email) {
-  const response = await fetch('/', {
-    method : 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body   : encode({
-      'form-name': 'newsletter',
-      'email'    : email,
-    }),
+async function submitToServer(email) {
+  const response = await fetch('/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error('Submission failed. Please try again.');
+    throw new Error(data.error || 'Subscription failed. Please try again.');
   }
-  return response;
+
+  return data;
 }
 
 async function handleSubmit(e) {
   e.preventDefault();
   
-  // Prevent duplicate submissions
   if (isSubmitting) return;
   
   const email = emailInput.value.trim();
@@ -91,11 +84,18 @@ async function handleSubmit(e) {
   setLoading(true);
 
   try {
-    await submitToNetlify(email);
+    await submitToServer(email);
+    setLoading(false);
     showSuccess(email);
   } catch (error) {
     setLoading(false);
-    showError(error.message || 'Something went wrong. Please try again later.');
+    if (window.location.protocol === 'file:') {
+      showError('This page must be served from the local server. Run `npm start` and open http://localhost:3000.');
+    } else if (error instanceof TypeError) {
+      showError('Unable to reach the server. Make sure the backend is running on http://localhost:3000.');
+    } else {
+      showError(error.message || 'Something went wrong. Please try again later.');
+    }
     emailInput.focus();
   } finally {
     isSubmitting = false;

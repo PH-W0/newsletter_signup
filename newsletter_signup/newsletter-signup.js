@@ -1,4 +1,4 @@
-// ↓ Paste your endpoint URL here
+
 const FORM_ENDPOINT = 'https://formspree.io/f/mvznqgjd';
 
 const card           = document.getElementById('signupCard');
